@@ -1,0 +1,294 @@
+<html>
+<head>
+<title>a</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="/xterm.min.css" rel="stylesheet" />
+<link href="/css/fontawesome.min.css" rel="stylesheet" />
+<link href="/css/solid.min.css" rel="stylesheet" />
+<style>
+  body, pre { margin: 0; padding: 0px; color: rgba(0,0,0,0.8); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .input-field {
+  /*
+    border: 2px solid rgba(0,0,0,0.2);
+    */
+    background: rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+  }
+  .logo {
+    text-align: center;
+    padding: 10px;
+  }
+  html {
+    background: rgb(43, 45, 49);
+  }
+  header {
+    background: rgb(43, 45, 49);
+    position: fixed;
+    top: 0;
+    left:0;
+    right: 0;
+    transition: max-height 0.2s ease-in-out;
+    max-height: 300px;
+    box-shadow: rgba(255,255,255, 0.04) 0px 1px 2px 0px;
+  /*
+    background: rgba(0,0,0,0.04);
+    */
+    background: rgb(43, 45, 49);
+    color: white;
+    z-index: 100;
+  }
+  header.collapsed {
+    max-height: 0;
+    overflow: hidden;
+  }
+  #form {
+    background: rgb(43,45,49);
+    margin: 0;
+    display: flex;
+    /*
+    position: fixed;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    */
+  }
+  #form button:hover {
+    color: yellowgreen;
+  }
+  #form button {
+    padding: 10px 20px;
+    border-radius: 0;
+    border: none;
+    color: white;
+    /*
+    background: rgb(43,45,49);
+    */
+    background: rgba(0,0,0,0.3);
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  /*
+  [contenteditable]:empty:not(:focus):before{
+  */
+  [contenteditable]:empty:before{
+    content:attr(data-placeholder);
+    color:grey;
+    font-weight: bold;
+  }
+  #input {
+    padding: 20px;
+    background: rgba(0,0,0,0.3);
+    color: white;
+    white-space: pre-wrap;
+    outline: none;
+    border: none;
+    flex-grow: 1;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  #input:focus { outline: none; }
+
+  #messages { list-style-type: none; margin: 0; box-sizing: border-box; font-size: 14px; padding: 0; }
+  #messages > li { padding: 10px; font-size: 14px; box-sizing: border-box; }
+  #messages > li:nth-child(odd) { background: #efefef; }
+  li { white-space: pre-wrap; }
+  .loading {
+    margin-bottom: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    color: rgba(0,0,0,0.7);
+    font-size: 14px;
+    background: #efefef;
+  }
+  .hidden {
+    display: none !important;
+  }
+  /*
+  .input-container {
+    margin: 10px;
+  }
+  */
+  .info {
+    font-size: 12px;
+    text-align: center;
+  }
+  .form-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 10px;
+    /*
+    padding: 10px 20px;
+    */
+  }
+  .stretch {
+    flex-grow: 1;
+  }
+  input[type=text] , select {
+    border: none;
+    /*
+    background: rgba(0,0,0,0.08);
+    */
+    background: rgba(0,0,0,0.2);
+    color: white;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    width: 100%;
+    /*
+    width: 100px;
+    */
+  }
+  .logo {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    font-size: 30px;
+    letter-spacing: -1px;
+    font-weight: bold;
+    font-family: georgia;
+
+  }
+  .config-container {
+  /*
+    width: 200px;
+    justify-content: center;
+    */
+    flex-wrap: wrap;
+    display: flex;
+  }
+  /*
+  .config-container {
+    display: flex;
+
+    flex-wrap: wrap;
+  }
+  */
+  .kv {
+    display: block;
+    font-size: 14px;
+    margin: 10px;
+    width :100px;
+  }
+  .kv label {
+    display: block;
+    padding: 5px;
+    color: white;
+    font-size: 12px;
+  }
+  body {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+  }
+  .container {
+    padding: 30px;
+    box-sizing: border-box;
+    background: rgb(43, 45, 49);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  #terminal {
+    flex-grow: 1;
+  }
+  button#configure {
+    background: rgba(0,0,0,0.3);
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100px;
+  }
+  .xterm .xterm-viewport {
+  }
+  .xterm {
+    box-sizing: border-box;
+  }
+  /*
+        #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+      */
+
+</style>
+</head>
+<body>
+<form id="form" action="">
+  <button id='install'><i class="fa-regular fa-paper-plane"></i> Install</button>
+  <button id='launch'><i class="fa-regular fa-paper-plane"></i> Launch</button>
+</form>
+<div class='container'>
+  <div id='terminal'></div>
+</div>
+<script src="/xterm.js"></script>
+<script src="/xterm-addon-fit.js"></script>
+<script src="/xterm-addon-web-links.js"></script>
+<script src="/xterm-theme.js"></script>
+<script src="/term.js"></script>
+<script src="/dal.js"></script>
+<script>
+(async () => {
+  let term = new Term(document.querySelector("#terminal"), {
+    theme: {
+      background: "rgb(43,45,49)",
+    },
+    onWriteParsed: () => {
+      term.scrollToBottom()
+    },
+    fontSize: 12,
+  });
+  let dal = new Dal({} ,"ws://localhost:4200")
+  console.log("init")
+  await dal.init()
+  console.log("initialized")
+  document.querySelector("#launch").addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation()
+    await dal.request({
+      message: "./webui.sh",
+      path: "stable-diffusion-webui"
+    }, (stream) => {
+      console.log("stream", stream)
+      if (stream.data) {
+        term.send(stream.data)
+      }
+    })
+  })
+  document.querySelector("#install").addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation()
+    const cmds = [{
+      message: "brew upgrade"
+    }, {
+      message: "brew update"
+    }, {
+      message: "brew install cmake protobuf rust python@3.10 git wget",
+    }, {
+      message: "git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui",
+    }, {
+      message: "python3 -m pip install virtualenv" ,
+    }, {
+      message: "python3 -m virtualenv venv",
+      path: "stable-diffusion-webui"
+    }, {
+      message: "wget -O model.ckpt https://huggingface.co/CompVis/stable-diffusion-v-1-4-original/resolve/main/sd-v1-4.ckpt",
+      path: "stable-diffusion-webui/models/Stable-diffusion"
+    }];
+    for(let cmd of cmds) {
+      await dal.request(cmd, (stream) => {
+        console.log("stream", stream)
+        if (stream.data) {
+          term.send(stream.data)
+        }
+      })
+      console.log("end", cmd)
+    }
+  });
+})();
+</script>
+</body>
+</html>
